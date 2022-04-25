@@ -33,6 +33,9 @@ namespace ProductsInventory.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("count")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(400)]
         public async Task<ProductCountDTO> ProductCount()
         {
             return await _productService.ProductCount();
@@ -46,6 +49,7 @@ namespace ProductsInventory.Controllers
         [HttpPost]
         [Route("order")]
         [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(400)]
 
         public async Task<IActionResult> Post([FromBody] OrderRequest order)
@@ -66,6 +70,7 @@ namespace ProductsInventory.Controllers
         /// <returns></returns>
         [HttpPut("{id}")]
         [ProducesResponseType(200)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(400)]
         public async Task<IActionResult> Put(int id, [FromBody] ProductStatusRequest productStatusRequest)
         {
