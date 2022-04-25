@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v5.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v5.0": {
+      "DukkanTek.Services/1.0.0": {
+        "dependencies": {
+          "DukkanTek.Domain": "1.0.0"
+        },
+        "runtime": {
+          "DukkanTek.Services.dll": {}
+        }
+      },
+      "DukkanTek.Domain/1.0.0": {
+        "runtime": {
+          "DukkanTek.Domain.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "DukkanTek.Services/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "DukkanTek.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
