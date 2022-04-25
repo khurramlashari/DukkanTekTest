@@ -19,7 +19,7 @@ namespace ProductsInventory
         /// <summary>
         /// API Friendly Name
         /// </summary>
-        public const string ApiFriendlyName = "productsInventory_api"; 
+        public const string ApiFriendlyName = "products Inventory api"; 
         /// <summary>
         /// Quick App ClientID
         /// </summary>
@@ -54,7 +54,11 @@ namespace ProductsInventory
         {
             return new List<ApiResource>
             {
-                new ApiResource(ApiName) {
+                new ApiResource() 
+                {
+                    Name = ApiName,
+                    Description = ApiFriendlyName,
+                    Scopes = new List<string>(){ApiName },
                     UserClaims = {
                         JwtClaimTypes.Name,
                         JwtClaimTypes.Email,
@@ -97,6 +101,8 @@ namespace ProductsInventory
                     {
                          "https://DukkanTek.com",
                         "http://DukkanTek.com",
+                         "http://localhost:5000",
+                        "https://localhost:5001",
                     },
 
                     AccessTokenLifetime = 5184000 ,
@@ -120,6 +126,8 @@ namespace ProductsInventory
                     {
                         "https://DukkanTek.com",
                         "http://DukkanTek.com",
+                        "http://localhost:5000",
+                        "https://localhost:5001",
                     },
                     AllowedScopes = {
                         ApiName
@@ -156,8 +164,7 @@ namespace ProductsInventory
     {
         ///<summary>A claim that specifies the subject of an entity</summary>
         public const string Subject = "sub";
-        public const string CompanyID = "companyid";
-
+        
         ///<summary>A claim that specifies the permission of an entity</summary>
         public const string Permission = "permission";
     }

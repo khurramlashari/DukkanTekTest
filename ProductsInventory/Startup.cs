@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using IdentityServer4.AccessTokenValidation;
+using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using Infrastructure.Data;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -23,16 +23,28 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace ProductsInventory
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class Startup
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="configuration"></param>
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to add services to the container.
+        /// </summary>
+        /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
             var applicationUrl = Configuration["ApplicationUrl"].TrimEnd('/');
@@ -67,15 +79,17 @@ namespace ProductsInventory
                 options.Lockout = lockoutOptions;
             });
             // add identityserver4
-            services.AddIdentityServer()
+            services.AddIdentityServer(y=> y.EmitStaticAudienceClaim =false)
                .AddDeveloperSigningCredential()
-               .AddAspNetIdentity<IdentityUser>()
+               .AddInMemoryPersistedGrants()
+               
                .AddInMemoryIdentityResources(IdentityServerConfig.GetIdentityResources())
                .AddInMemoryApiScopes(IdentityServerConfig.GetApiScopes())
                .AddInMemoryApiResources(IdentityServerConfig.GetApiResources())
                .AddInMemoryClients(IdentityServerConfig.GetClients())
                .AddClientStore<InMemoryClientStore>()
-               .AddResourceStore<InMemoryResourcesStore>();
+               .AddResourceStore<InMemoryResourcesStore>()
+               .AddAspNetIdentity<IdentityUser>();
             //.AddConfigurationStore(options =>
             //{
             //    options.ConfigureDbContext = builder =>
@@ -92,7 +106,7 @@ namespace ProductsInventory
             // })
             ;
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
                 .AddIdentityServerAuthentication(options =>
                  {
                      options.Authority = applicationUrl;
@@ -108,10 +122,10 @@ namespace ProductsInventory
             services.AddUnitOfWork();
             services.AddRepositories();
             services.AddBusinessServices();
+            services.AddCors();
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-            services.AddCors();
 
             services.AddSwaggerGen(c =>
             {
@@ -199,7 +213,11 @@ namespace ProductsInventory
             services.AddTransient<IDatabaseInitializer, DatabaseInitializer>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="env"></param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -212,18 +230,21 @@ namespace ProductsInventory
                     c.OAuthClientSecret("no_password"); //Leaving it blank doesn't work);
                 });
             }
-
+            else
+            {
+                app.UseHsts();
+            }
             app.UseHttpsRedirection();
 
             app.UseRouting();
             app.UseIdentityServer();
-            app.UseAuthentication();
             app.UseCors(builder => builder
                 .AllowAnyOrigin()
                 .AllowAnyHeader()
                 .WithExposedHeaders("X-Pagination")
                 .AllowAnyMethod());
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

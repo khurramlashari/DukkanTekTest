@@ -105,7 +105,8 @@ namespace ProductsInventory.Seed
                     Barcode = "232323",
                     ProductCategoryId = 1,
                     ProductStatusId = 1,
-                    Weight = 2.5m
+                    Weight = 2.5m,
+                    Stock = 100
                 });
                 await _context.Products.AddAsync(new DukkanTek.Domain.Entities.Product()
                 {
@@ -114,7 +115,8 @@ namespace ProductsInventory.Seed
                     Barcode = "232324",
                     ProductCategoryId = 2,
                     ProductStatusId = 2,
-                    Weight = 2.5m
+                    Weight = 2.5m,
+                    Stock = 100
                 });
                 await _context.Products.AddAsync(new DukkanTek.Domain.Entities.Product()
                 {
@@ -123,7 +125,8 @@ namespace ProductsInventory.Seed
                     Barcode = "232323",
                     ProductCategoryId = 3,
                     ProductStatusId = 3,
-                    Weight = 2.5m
+                    Weight = 2.5m,
+                    Stock = 100
                 });
                 await _context.SaveChangesAsync();
             }

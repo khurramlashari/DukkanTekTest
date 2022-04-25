@@ -1,15 +1,18 @@
 ﻿using DukkanTek.Domain.DTOs;
 using DukkanTek.Services.Product;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using IdentityServer4.AccessTokenValidation;
 
 namespace ProductsInventory.Controllers
 {
     /// <summary>
     /// Product controller
     /// </summary>
-    [Authorize]
+    /// 
+    [ApiController]
+    [Authorize(AuthenticationSchemes = IdentityServerAuthenticationDefaults.AuthenticationScheme)]
     [ApiVersion("1.0")]
     [Route("api/v{version:apiVersion}/[controller]")]
     public class ProductController : ControllerBase
